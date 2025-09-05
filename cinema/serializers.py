@@ -101,7 +101,7 @@ class MovieSessionDetailSerializer(MovieSessionSerializer):
 class TicketSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ticket
-        fields = ["movie_session", "row", "seat"]
+        fields = ["id", "movie_session", "row", "seat"]
 
     def validate(self, attrs):
         movie_session = attrs["movie_session"]
@@ -118,8 +118,8 @@ class OrderSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Order
-        fields = ["created_at", "user", "tickets"]
-        read_only_fields = "user"
+        fields = ["id", "created_at", "tickets"]
+        read_only_fields = ("id", "created_at")
 
     def create(self, validated_data):
         with transaction.atomic():
@@ -135,8 +135,8 @@ class OrderCreateSerializer(OrderSerializer):
 
     class Meta:
         model = Order
-        fields = ["id", "created_at", "user", "tickets"]
-        read_only_fields = ["id", "created_at", "user"]
+        fields = ["id", "created_at", "tickets"]
+        read_only_fields = ("id", "created_at")
 
 
 class TicketListSerializer(TicketSerializer):
@@ -148,4 +148,4 @@ class OrderListSerializer(OrderSerializer):
 
     class Meta:
         model = Order
-        fields = ["id", "created_at", "user", "tickets"]
+        fields = ["id", "created_at", "tickets"]
