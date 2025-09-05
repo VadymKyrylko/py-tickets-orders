@@ -68,7 +68,7 @@ class MovieSessionListSerializer(MovieSessionSerializer):
     cinema_hall_capacity = serializers.IntegerField(
         source="cinema_hall.capacity", read_only=True
     )
-    tickets_available = serializers.IntegerField(read_only=True)
+    tickets_available = serializers.SerializerMethodField()
 
     class Meta:
         model = MovieSession
@@ -80,6 +80,11 @@ class MovieSessionListSerializer(MovieSessionSerializer):
             "cinema_hall_capacity",
             "tickets_available"
         )
+
+    def get_tickets_available(self, obj):
+        if hasattr(obj, "tickets_available") and obj.tickets_available is not None:
+            return obj.tickets_available
+        return obj.cinema_hall.capacity - obj.tickets.count()
 
 
 class MovieSessionDetailSerializer(MovieSessionSerializer):
