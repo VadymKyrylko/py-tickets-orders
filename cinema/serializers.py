@@ -82,7 +82,8 @@ class MovieSessionListSerializer(MovieSessionSerializer):
         )
 
     def get_tickets_available(self, obj):
-        if hasattr(obj, "tickets_available") and obj.tickets_available is not None:
+        if (hasattr(obj, "tickets_available")
+                and obj.tickets_available is not None):
             return obj.tickets_available
         return obj.cinema_hall.capacity - obj.tickets.count()
 
